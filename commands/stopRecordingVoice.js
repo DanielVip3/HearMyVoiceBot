@@ -22,15 +22,15 @@ client.on('message', async(message) => {
 			return;
 		}
 		
-		let stopMessage = await message.channel.send("Please, wait while I stop recording...");
+		let stopMessage = await message.channel.send("Please, wait while I stop recording... (don't talk, I'm still recording)");
 		await message.react("✅");
 		
-		let audioStream = audioStreamPerGuild[message.guild.id]["stream"];
-		audioStream.destroy();
-		
-		audioStreamPerGuild[message.guild.id] = null;
-		
-		stopMessage.delete();
-		message.delete();
+		setTimeout(() => {
+			let audioStream = audioStreamPerGuild[message.guild.id]["stream"];
+			audioStream.destroy();
+			audioStreamPerGuild[message.guild.id] = null;
+			stopMessage.delete();
+			message.delete();
+		}, 2000);
 	}
 });
