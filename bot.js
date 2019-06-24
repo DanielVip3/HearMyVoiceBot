@@ -2,6 +2,8 @@ const constants = require('./constants.js');
 const client = constants.client;
 const token = constants.token;
 
+require('./commands/commandsMain.js');
+
 client.on('ready', () => {
   console.log(`
   __      __   _          ____        _   
