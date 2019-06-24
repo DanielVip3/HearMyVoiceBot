@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
+const Hjson = require('hjson');
 const fs = require('fs');
 const path = require('path');
 
-const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, "./config.json"), 'utf8'));
+const config = Hjson.parse(fs.readFileSync(path.resolve(__dirname, "./config.hjson"), 'utf8'));
 
-const token = config.token;
+const {token} = config;
 const defaultPrefix = "v!";
 
 const client = new Discord.Client();
@@ -22,5 +23,6 @@ const audioStreamPerGuild = {};
 module.exports = {
 	token,
 	prefix: defaultPrefix,
-	client
+	client,
+	audioStreamPerGuild
 };
