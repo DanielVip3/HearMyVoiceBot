@@ -8,6 +8,16 @@ const fs = require('fs');
 const path = require('path');
 const Lame = require("node-lame").Lame;
 
+const { Readable } = require('stream');
+
+const SILENCE_FRAME = Buffer.from([0xF8, 0xFF, 0xFE]);
+
+class Silence extends Readable {
+  _read() {
+    this.push(SILENCE_FRAME);
+  }
+}
+
 let audioFilePath = path.join(__dirname, '..', `/audio`);
 
 function generateFileName(channel, member) {
@@ -37,11 +47,16 @@ client.on('message', async(message) => {
 			return;
 		}
 		
+		let loadingMessage = await message.channel.send("Loading, please wait...");
+		
 		voiceChannel.join()
 			.then(async(connection) => {
-				await connection.play(audioFilePath);
-				await message.channel.send("Listening.");
+				let soundMessage = await message.channel.send("Please, first make a sound to confirm the start of this voice message.");
+				await connection.play(new Silence(), { type: 'opus' });
+				let listeningMessage = await message.channel.send("Listening.");
 				const receiver = connection.receiver;
+				
+				await loadingMessage.delete();
 				
 				let audioStream = await receiver.createStream(message.author, {mode: 'pcm', end: 'silence'});
 				
@@ -51,6 +66,9 @@ client.on('message', async(message) => {
 				audioStream.pipe(outputStream);
 				
 				audioStream.on('close', () => {
+					soundMessage.delete();
+					listeningMessage.delete();
+					
 					connection.disconnect();
 					
 					let mp3FileName = fileName.replace('.pcm', '.mp3');
@@ -64,10 +82,18 @@ client.on('message', async(message) => {
 					encoder
 						.encode()
 						.then(async() => {
+							await fs.unlinkSync(fileName);							
+							
 							await message.channel.send(`Voice message by <@${message.author.id}>`);
 							await message.channel.send({
-								files: [mp3FileName],
+								files: [{
+									attachment: mp3FileName,
+									name: `Voice Message by ${message.author.username} | ${Date.now().toString()}.mp3`
+								}],
 							});
+							
+							await message.delete();
+							await fs.unlinkSync(mp3FileName);
 						})
 						.catch(error => {
 							console.error(error);
