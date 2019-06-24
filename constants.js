@@ -9,6 +9,16 @@ const defaultPrefix = "v!";
 
 const client = new Discord.Client();
 
+const audioStreamPerGuild = {};
+/*
+	audioStreamPerGuild = {
+		guild_id: {
+			stream: ReadableStream (audioStream)
+			author_id: string (author id)
+		},
+	}
+*/
+
 module.exports = {
 	token,
 	prefix: defaultPrefix,

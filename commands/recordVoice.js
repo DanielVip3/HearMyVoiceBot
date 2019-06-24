@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const constants = require('../constants.js');
 const prefix = constants.prefix;
 const client = constants.client;
+const audioStreamPerGuild = constants.audioStreamPerGuild;
 
 const fs = require('fs');
 const path = require('path');
@@ -28,6 +29,11 @@ function generateFileName(channel, member) {
 
 client.on('message', async(message) => {
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}record`)) {
+		if (audioStreamPerGuild[message.guild.id]) {
+			await message.channel.send(`<@${message.author.id}>, I am already recording a voice message in another voice channel. Please wait until I finish.`);
+			return;
+		}
+		
 		let member = await message.guild.member(message.author);
 		
 		if (!member) {
@@ -48,17 +54,22 @@ client.on('message', async(message) => {
 		}
 		
 		let loadingMessage = await message.channel.send("Loading, please wait...");
+		await message.react("✅");
 		
 		voiceChannel.join()
 			.then(async(connection) => {
 				let soundMessage = await message.channel.send("Please, first make a sound to confirm the start of this voice message.");
 				await connection.play(new Silence(), { type: 'opus' });
-				let listeningMessage = await message.channel.send("Listening.");
+				let listeningMessage = await message.channel.send(`Listening, **send \`${prefix}stop\` to stop recording.**`);
 				const receiver = connection.receiver;
 				
 				await loadingMessage.delete();
 				
-				let audioStream = await receiver.createStream(message.author, {mode: 'pcm', end: 'silence'});
+				let audioStream = await receiver.createStream(message.author, {mode: 'pcm', end: 'manual'});
+				audioStreamPerGuild[message.guild.id] = {
+					stream: audioStream,
+					author_id: message.author.id
+				};
 				
 				const fileName = generateFileName(voiceChannel, message.author);
 				const outputStream = fs.createWriteStream(fileName, {flags: "w"});
@@ -68,6 +79,14 @@ client.on('message', async(message) => {
 				audioStream.on('close', () => {
 					soundMessage.delete();
 					listeningMessage.delete();
+					
+					let embed = new Discord.MessageEmbed()
+						.setTitle(`Voice Message from ${message.author.username}`)
+						.setDescription(`Recorded in voice channel "${voiceChannel.name}"`)
+						.setColor(0x00FA9A)
+						.setAuthor(`${message.author.username}#${message.author.discriminator}`, message.author.displayAvatarURL())
+						.setThumbnail(message.author.displayAvatarURL())
+						.setTimestamp();
 					
 					connection.disconnect();
 					
@@ -84,7 +103,7 @@ client.on('message', async(message) => {
 						.then(async() => {
 							await fs.unlinkSync(fileName);							
 							
-							await message.channel.send(`Voice message by <@${message.author.id}>`);
+							await message.channel.send({embed});
 							await message.channel.send({
 								files: [{
 									attachment: mp3FileName,
