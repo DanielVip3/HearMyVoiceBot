@@ -8,6 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const Lame = require("node-lame").Lame;
 
+let audioFilePath = path.join(__dirname, '..', `/audio`);
+
 function generateFileName(channel, member) {
 	let pathvar = path.join(__dirname, '..', `/recordings`);
 	const fileName = pathvar+`/${channel.id}-${member.id}-${Date.now()}.pcm`;
@@ -37,6 +39,7 @@ client.on('message', async(message) => {
 		
 		voiceChannel.join()
 			.then(async(connection) => {
+				await connection.play(audioFilePath);
 				await message.channel.send("Listening.");
 				const receiver = connection.receiver;
 				
