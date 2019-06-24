@@ -101,7 +101,7 @@ client.on('message', async(message) => {
 					encoder
 						.encode()
 						.then(async() => {
-							await fs.unlinkSync(fileName);							
+							await fs.unlinkSync(fileName);
 							
 							await message.channel.send({embed});
 							await message.channel.send({
