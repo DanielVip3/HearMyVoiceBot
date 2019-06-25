@@ -26,9 +26,20 @@ const audioStreamPerGuild = {};
 	}
 */
 
+const voiceChannelPerGuild = {};
+/*
+	voiceChannelPerGuild = {
+		guild_id: {
+			voice_channel_id: string (voice channel id)
+			text_channel_id: string (text channel id)
+		}
+	}
+*/
+
 module.exports = {
 	token,
 	prefix: defaultPrefix,
 	client,
-	audioStreamPerGuild
+	audioStreamPerGuild,
+	voiceChannelPerGuild
 };
