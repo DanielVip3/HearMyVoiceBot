@@ -2,12 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let guilds = new Schema({
-	guild_id: String,
+	guild_id: { type: String, index: true, unique: true },
 	guild_prefix: String,
-	voiceRecord: {
-		author_id: String,
-		stream: Mixed,
-	}
 });
 
 module.exports = {
