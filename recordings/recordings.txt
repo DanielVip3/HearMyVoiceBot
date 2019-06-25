@@ -1,0 +1,1 @@
+Here will go all the recordings for the bot, first in pcm, then converted in mp3, and then both files will be removed.
