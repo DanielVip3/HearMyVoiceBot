@@ -41,7 +41,17 @@ class Recorder {
 		});
 		
 		this.isRecording = true;
-		
+
+		/* If after 15 minutes, voice recording didn't finish */
+		this.timeout = setTimeout(async() => {
+			await user.send("It looks that your voice message is too long. I'm sorry, I had to stop it because I can't handle messages longer than 15 minutes.");
+			this.saveRecording(callbackOnRecorded);
+
+			if (this.guild && this.guild.me.voice && this.guild.me.voice.channel) {
+				await this.guild.me.voice.channel.leave();
+			}
+		}, 1000*60*15);
+
 		return audioStream;
 	}
 	
@@ -58,6 +68,8 @@ class Recorder {
 				audioStreamPerGuild[this.guild.id] = null;
 				
 				this.isRecording = false;
+
+				if (this.timeout) clearTimeout(this.timeout);
 				
 				return true;
 			}
@@ -70,11 +82,19 @@ class Recorder {
 	
 	async saveRecording(callback) {
 		this.isRecording = false;
+
+		/*
+		* I don't have any experience with encoding, but I noticed that if I set sfreq to low values(8, 11.025, 12) it looks like a demonic voice.
+		* From 16, 22.05, 24, 32 to 44.1 it looks like a very deep voice.
+		* 48 is a normal voice.
+		*/
 		
 		const encoder = new Lame({
 			output: this.mp3FileName,
 			raw: true,
-			bitrate: 192
+			bitrate: 192,
+			scale: 3,
+			sfreq: 48
 		}).setFile(this.fileName);
 		
 		encoder
