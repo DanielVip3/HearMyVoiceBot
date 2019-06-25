@@ -5,13 +5,7 @@ const prefix = constants.prefix;
 const client = constants.client;
 const audioStreamPerGuild = constants.audioStreamPerGuild;
 
-const fs = require('fs');
-const path = require('path');
-const Lame = require("node-lame").Lame;
-
 const Recorder = require("../utils/Recorder.js");
-
-const generateRecordingFileName = require('../utils/generateRecordingFileName.js');
 
 client.on('message', async(message) => {
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}record`)) {
@@ -82,7 +76,6 @@ client.on('message', async(message) => {
 			.catch(async(error) => {
 				console.error(error);
 				await message.channel.send("There was an unknown error. It could be related to the voice channel: may it be because I haven't permissions to join it? Else, the error should be a bug. Please feel free to contact the developer DanielVip3#6167.");
-				return;
 			});
 	}
 });
