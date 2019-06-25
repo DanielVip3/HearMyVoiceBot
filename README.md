@@ -38,9 +38,9 @@ Database isn't currently used but is included in code, and it will be used the b
 # Documentation
 **Default bot prefix: `v!`**
 
-###### v!record
+##### v!record
   W.I.P.
-###### v!stop
+##### v!stop
   W.I.P.
 
 # Screenshots
