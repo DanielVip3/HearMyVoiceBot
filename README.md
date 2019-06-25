@@ -16,7 +16,7 @@ Also, this bot requires the following modules, installable by npm:
 The actual repo also contains a file, config.hjson, that is .gitignored because it contains tokens and database informations that shouldn't be known to the public. So no one can access this file, but it's needed to setup the bot.
 You can recreate this file in this way
 `config.hjson`, in master branch, main folder
-```json
+```
 {
   token: [bot-token]
   
@@ -36,13 +36,17 @@ Database isn't currently used but is included in code, and it will be used the b
 - Screenshots ?
 
 # Documentation
+**Default bot prefix: `v!`**
 
-W.I.P.
+###### v!record
+  W.I.P.
+###### v!stop
+  W.I.P.
 
 # Screenshots
 
 W.I.P.
 
-# Contributors
+# Licensing and Contributors
 As the MIT license says, all the rights are granted to Daniele De Martino(DanielVip3, on Discord DanielVip3#6167).
 Please, respect the license.
