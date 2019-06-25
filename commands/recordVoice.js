@@ -9,23 +9,9 @@ const fs = require('fs');
 const path = require('path');
 const Lame = require("node-lame").Lame;
 
-const { Readable } = require('stream');
+const Recorder = require("../utils/Recorder.js");
 
-const SILENCE_FRAME = Buffer.from([0xF8, 0xFF, 0xFE]);
-
-class Silence extends Readable {
-  _read() {
-    this.push(SILENCE_FRAME);
-  }
-}
-
-let audioFilePath = path.join(__dirname, '..', `/audio`);
-
-function generateFileName(channel, member) {
-	let pathvar = path.join(__dirname, '..', `/recordings`);
-	const fileName = pathvar+`/${channel.id}-${member.id}-${Date.now()}.pcm`;
-	return fileName;
-}
+const generateRecordingFileName = require('../utils/generateRecordingFileName.js');
 
 client.on('message', async(message) => {
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}record`)) {
@@ -58,29 +44,23 @@ client.on('message', async(message) => {
 		
 		voiceChannel.join()
 			.then(async(connection) => {
-				let soundMessage = await message.channel.send("Please, first make a sound to confirm the start of this voice message.");
-				await connection.play(new Silence(), { type: 'opus' });
-				let listeningMessage = await message.channel.send(`Listening, **send \`${prefix}stop\` to stop recording.**`);
+				await Recorder.prepareToRecord(connection);
+				
+				await message.delete();
+				let listeningMessage = await message.author.send(`I'm now recording your voice, **send \`${prefix}stop\` in the channel you want to stop recording and send your voice message.**`);
+				
 				const receiver = connection.receiver;
 				
 				await loadingMessage.delete();
+			
+				let recorder = new Recorder(message.guild, receiver);
 				
-				let audioStream = await receiver.createStream(message.author, {mode: 'pcm', end: 'manual'});
-				audioStreamPerGuild[message.guild.id] = {
-					stream: audioStream,
-					author_id: message.author.id
-				};
-				
-				const fileName = generateFileName(voiceChannel, message.author);
-				const outputStream = fs.createWriteStream(fileName, {flags: "w"});
-						
-				audioStream.pipe(outputStream);
-				
-				audioStream.on('close', () => {
-					soundMessage.delete();
+				await recorder.startRecording(message.author, async(mp3FileName) => {
 					listeningMessage.delete();
 					
-					let embed = new Discord.MessageEmbed()
+					connection.disconnect();
+					
+					let embed = await new Discord.MessageEmbed()
 						.setTitle(`Voice Message from ${message.author.username}`)
 						.setDescription(`Recorded in voice channel "${voiceChannel.name}"`)
 						.setColor(0x00FA9A)
@@ -88,36 +68,16 @@ client.on('message', async(message) => {
 						.setThumbnail(message.author.displayAvatarURL())
 						.setTimestamp();
 					
-					connection.disconnect();
-					
-					let mp3FileName = fileName.replace('.pcm', '.mp3');
-					
-					const encoder = new Lame({
-						output: mp3FileName,
-						raw: true,
-						bitrate: 192
-					}).setFile(fileName);
-					
-					encoder
-						.encode()
-						.then(async() => {
-							await fs.unlinkSync(fileName);
-							
-							await message.channel.send({embed});
-							await message.channel.send({
-								files: [{
-									attachment: mp3FileName,
-									name: `Voice Message by ${message.author.username} | ${Date.now().toString()}.mp3`
-								}],
-							});
-							
-							await message.delete();
-							await fs.unlinkSync(mp3FileName);
-						})
-						.catch(error => {
-							console.error(error);
-						});
+					await message.channel.send({embed});
+					await message.channel.send({
+						files: [{
+							attachment: mp3FileName,
+							name: `Voice Message by ${message.author.username} | ${Date.now().toString()}.mp3`
+						}],
+					});
 				});
+				
+				audioStreamPerGuild[message.guild.id]['recorder'] = recorder;
 			})
 			.catch(async(error) => {
 				console.error(error);
