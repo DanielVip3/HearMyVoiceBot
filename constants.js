@@ -19,6 +19,7 @@ const audioStreamPerGuild = {};
 /*
 	audioStreamPerGuild = {
 		guild_id: {
+			recorder: Recorder (recorder)
 			stream: ReadableStream (audioStream)
 			author_id: string (author id)
 		},
