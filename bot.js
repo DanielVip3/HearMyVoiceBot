@@ -3,6 +3,7 @@ const client = constants.client;
 const token = constants.token;
 
 require('./commands/commandsMain.js');
+require('./events/eventsMain.js');
 
 client.on('ready', () => {
   console.log(`
