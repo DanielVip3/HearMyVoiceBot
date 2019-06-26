@@ -3,36 +3,55 @@ const prefix = constants.prefix;
 const client = constants.client;
 const audioStreamPerGuild = constants.audioStreamPerGuild;
 
-const Recorder = require("../utils/Recorder.js");
+const embeds = require("../utils/embeds.js");
 
 client.on('message', async(message) => {
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}stop`)) {
 		let member = await message.guild.member(message.author);
 		
 		if (!member) {
-			await message.channel.send("There was an unknown error. We're sorry, but it looks like you're not in this server anymore!");
+			await message.author.send({
+				embed: embeds.notInTheServer(message.author)
+			});
 			return;
 		}
-		
+
+		/* If audioStreamPerGuild, for this guild, was not found */
+		/* Means that no recording was started */
 		if (!audioStreamPerGuild[message.guild.id]) {
-			await message.channel.send("It was impossible to stop recording because I wasn't recording anything.");
+			await message.channel.send({
+				embed: embeds.notRecording(message.author)
+			});
 			return;
 		}
-		
+
+		/* If the user who started the recording, in audioStreamPerGuild, is different from the user who used this command */
+		/* Means that this user tried to stop recording, but he wasn't the one who started to record, so he can't */
 		if (audioStreamPerGuild[message.guild.id]["author_id"] !== message.author.id) {
-			await message.channel.send(`This voice recording was started by <@${audioStreamPerGuild[message.guild.id]["author_id"]}>, and so you're not allowed to stop it.`);
+			await message.channel.send({
+				embed: embeds.notStartedByYou(message.author, audioStreamPerGuild[message.guild.id]["author_id"])
+			});
 			return;
 		}
-		
-		await message.author.send("You stopped recording.\n----------------");
-		let stopMessage = await message.channel.send("Please, wait while I stop recording... (don't talk, I'm still recording)");
+
+		/* Let the user know that he stopped recording */
+		await message.author.send({
+			embed: embeds.stoppedRecording(message.author)
+		});
+		/* While stopping recording using this command, the bot continues to record for another 0.5 second, and so the bot informs the user about this, with this embed message */
+		let stopMessage = await message.channel.send({
+			embed: embeds.loadingStoppingRecord(message.author)
+		});
 		await message.react("✅");
-		
-		setTimeout(async() => {
+
+		if (audioStreamPerGuild[message.guild.id]) {
+			/* Gets the recorder and stops recording */
 			let recorder = audioStreamPerGuild[message.guild.id]['recorder'];
 			await recorder.stopRecording(message.author);
-			await stopMessage.delete();
-			await message.delete();
-		}, 2000);
+		}
+
+		/* Deletes stop message sent in the guild, and the user's message that contains the command */
+		await stopMessage.delete();
+		await message.delete();
 	}
 });
