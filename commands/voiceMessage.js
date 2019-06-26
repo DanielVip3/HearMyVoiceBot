@@ -7,6 +7,9 @@ const voiceChannelPerGuild = constants.voiceChannelPerGuild;
 const embeds = require("../utils/embeds.js");
 
 client.on('message', async(message) => {
+    /* If bot can't write messages */
+    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
     if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}voicemessage`)) {
         if (audioStreamPerGuild[message.guild.id]) {
             await message.channel.send({

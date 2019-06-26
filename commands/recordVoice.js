@@ -9,6 +9,9 @@ const embeds = require("../utils/embeds.js");
 const Recorder = require("../utils/Recorder.js");
 
 client.on('message', async(message) => {
+	/* If bot can't write messages */
+	if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}record`)) {
 		if (audioStreamPerGuild[message.guild.id]) {
 			await message.channel.send({
