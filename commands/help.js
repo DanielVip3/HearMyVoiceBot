@@ -7,6 +7,7 @@ const client = constants.client;
 client.on('message', async(message) => {
     if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}help`)) {
 
+        /* Gets my avatar URL */
         let DanielVip3 = await client.users.fetch("472831424903380992", true);
         let DanielVip3AvatarURL;
         if (DanielVip3) DanielVip3AvatarURL = await DanielVip3.displayAvatarURL();
@@ -24,11 +25,15 @@ This bot's main purpose is to work as a voice message recorder and send voice me
 \n\n
 ⏺   \`v!record\` - Command that goes in combo with \`v!stop\`. When used, in a voice channel, the bot joins it and starts recording your voice. When you want to stop recording, just use \`v!stop\` in the channel where you want the voice message to be sent.\n
 ⏺   \`v!stop\` - Command that goes in combo with \`v!record\`. When used, after it, stops recording the voice message and sends it in the channel where this command was used.\n
+\n\n
+If the bot is stuck, you can use\n
+⏺   \`v!stuck\` - Command that should un-bug the bot. Please, use it only for emergency situations, like when the bot says that he's recording while he isn't. This command makes the bot leave voice channels, and remove his custom created voice channels.\n
                 `)
             .setColor(`#${Math.floor(Math.random()*16777215).toString(16)}`)
             .setFooter("Made by DanielVip3#6167", DanielVip3AvatarURL)
             .setTimestamp();
 
+        /* Sends help in DM and sends "Check DM for help!" in the guild */
         await message.author.send({embed});
         await message.react("✅");
         await message.channel.send("Check DM for help!");
