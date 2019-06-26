@@ -95,8 +95,8 @@ Please, don't abuse this command, because if you do, your server will be banned 
 This command basically should unstuck bot from weird situations or uncaught bugs, like when the bot says he's recording when he isn't.\
 When this command is used, bot leaves his voice channel, removes his custom-made voice channels and should then unstuck.
 
-# Screenshots
-![GIF of Voice Channel](https://i.imgur.com/4KMEBFj.mp4 | width=100)
+# Screenshot (idk why, just to make it look cooler)
+<img src="https://media.giphy.com/media/W3OJtmWlSvmwullMnW/giphy.gif" alt="GIF of Voice Channel" width="250" height="250">
 W.I.P.
 
 # Licensing and Contributors
