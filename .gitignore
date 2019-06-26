@@ -1,2 +1,4 @@
 
 *.hjson
+
+/node_modules
