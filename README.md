@@ -1,3 +1,7 @@
+# PLEASE, NOTE!
+**If you want to test the bot, join this official test Discord server https://discord.gg/KRrv2Bp (yeah, that's also for you, Discord Staff/Testers!).**
+
+
 # About
 HearMyVoice, or, as I like to call it, HMV, is a project that was only born to be a Discord Hack Week entry, but then I thought to expand it to a public bot.
 
