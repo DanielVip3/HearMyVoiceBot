@@ -17,7 +17,7 @@ Also, this bot requires the following modules, installable by npm:
   - hjson
 Other modules are included in package.json but not required, and you can install them if you want.  
   
-I recommend using Node v12.4.0(because that's the version that I used to test). But it should work too on Node v.11.15.0.
+I recommend using Node v10.2.1(because that's the version that I used to test). But it should work too on newer versions, like Node v.11.15.0 or v12.4.0.
 I don't know tho on older Node versions.
   
   
