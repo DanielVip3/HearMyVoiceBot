@@ -35,7 +35,7 @@ Database isn't currently used but is included in code, and it will be used the b
 - Make it more user-friendly, easier to use, with a good interface. Idea: create a file with all cool embeds and import them from that file, to avoid writing embeds in files themself.
 - Code splitting and commenting.
 - Intensive testing(and unit testing).
-- Screenshots ?
+- Screenshot about sending voice message in text channel
 - After finishing the bot, make a command v!setupserver, where a permanent voice channel is created and stored in the database. When someone joins that channel, the bot records its voice, and when he leaves, the voice message is sent in a text channel stored in the database.
 - After finishing the bot, make v!voicemessage category configurable
 - After finishing the bot, add permissions for admins to stop voice message recording and to create voice channels where you can't use recording messages.
@@ -98,7 +98,8 @@ If you leave the voice channel mid-recording, the bot will leave the voice chann
 Just stops recording your voice, if you've started recording with `v!record`. Only the one who started recording, can stop recording.\
 Use this command in the channel where you want to send your voice message, because it'll be sent there.
 
-# Screenshots
+# Screenshot (idk why, just to make it look cooler)
+<img src="https://media.giphy.com/media/W3OJtmWlSvmwullMnW/giphy.gif" alt="GIF of Voice Channel" width="250" height="250">
 
 W.I.P.
 
