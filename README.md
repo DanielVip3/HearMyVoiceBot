@@ -11,6 +11,11 @@ Also, this bot requires the following modules, installable by npm:
   - discord.js(v12)
   - node-lame; remember that node-lame requires installing LAME, see in the "Lame" paragraph
   - hjson
+Other modules are included in package.json but not required, and you can install them if you want.  
+  
+I recommend using Node v12.4.0(because that's the version that I used to test). But it should work too on Node v.11.15.0.
+I don't know tho on older Node versions.
+  
   
 The actual repo also contains a file, config.hjson, that is .gitignored because it contains tokens and database informations that shouldn't be known to the public. So no one can access this file, but it's needed to setup the bot.
 You can recreate this file in this way
