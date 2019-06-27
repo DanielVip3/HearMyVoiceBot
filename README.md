@@ -13,6 +13,7 @@ Setting up this bot isn't hard. But there are few things that you should remembe
 First of all, the version of discord.js that should be installed is v12, currently master branch **(not stable)**.
 Also, this bot requires the following modules, installable by npm:
   - discord.js(v12)
+  - node-opus or opusscript
   - node-lame; remember that node-lame requires installing LAME, see in the "Lame" paragraph
   - hjson
 Other modules are included in package.json but not required, and you can install them if you want.  
