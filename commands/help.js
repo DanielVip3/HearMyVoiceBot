@@ -5,6 +5,8 @@ const prefix = constants.prefix;
 const client = constants.client;
 
 client.on('message', async(message) => {
+    if (message.channel.type !== "text") return;
+
     /* If bot can't write messages */
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
 

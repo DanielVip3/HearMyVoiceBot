@@ -8,12 +8,12 @@ const embeds = require("../utils/embeds.js");
 const Recorder = require("../utils/Recorder.js");
 
 client.on('voiceStateUpdate', async(oldState, newState) => {
-    if (newState.member.user.bot) return;
-
     /* If newState doesn't exist, means that user left a channel, instead of joining, so return */
     if (!newState || !newState.channelID) return;
     /* If oldState and newState channels are equal, means that the user didn't join any channel but just muted/unmuted */
     if (oldState.channelID === newState.channelID) return;
+
+    if (newState.member.user.bot) return;
 
     /* If joined channel is the one that the bot created, saved in voiceChannelPerGuild */
     if (voiceChannelPerGuild[newState.guild.id] && voiceChannelPerGuild[newState.guild.id]['voice_channel_id'] === newState.channelID) {
