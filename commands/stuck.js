@@ -6,10 +6,10 @@ const voiceChannelPerGuild = constants.voiceChannelPerGuild;
 
 /* Command that should be used ONLY if the bot is stuck or bugged */
 client.on('message', async(message) => {
-    /* If bot can't write messages */
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
-
     if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}stuck`)) {
+        /* If bot can't write messages */
+        if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
         await message.react("✅");
         message.channel.send("If you used this command, is because the bot is totally stuck or bugged. \nRemember that abusing this command will result in removing it from your server. \nEverything should be ok now.");
 

@@ -5,12 +5,10 @@ const prefix = constants.prefix;
 const client = constants.client;
 
 client.on('message', async(message) => {
-    if (message.channel.type !== "text") return;
-
-    /* If bot can't write messages */
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
-
     if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}help`)) {
+
+        /* If bot can't write messages */
+        if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
 
         /* Gets my avatar URL */
         let DanielVip3 = await client.users.fetch("472831424903380992", true);
