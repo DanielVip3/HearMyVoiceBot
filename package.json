@@ -45,6 +45,7 @@
     "discord.js": "github:discordjs/discord.js#master",
     "hjson": "^3.1.2",
     "mongoose": "^5.6.1",
-    "node-lame": "^1.2.0"
+    "node-lame": "^1.2.0",
+    "node-opus": "^0.3.2"
   }
 }
