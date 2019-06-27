@@ -135,7 +135,7 @@ function notRecording(user) {
 function notStartedByYou(user, startedFromUserID) {
     return new MessageEmbed()
         .setTitle(`Not allowed to stop recording!`)
-        .setDescription(`This voice recording was started by <@${startedFromUser}>, and so you're not allowed to stop it.`)
+        .setDescription(`This voice recording was started by <@${startedFromUserID}>, and so you're not allowed to stop it.`)
         .setColor(0xf45042)
         .setAuthor(`${client.user.username}#${client.user.discriminator}`, client.user.displayAvatarURL())
         .setThumbnail(user.displayAvatarURL())
