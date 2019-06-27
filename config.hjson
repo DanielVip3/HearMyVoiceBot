@@ -1,9 +1,0 @@
-{
-	// Token to login the bot
-	token: NTkyNzYzNzI1MTE1NTU1ODUw.XREEzQ.dZ4z_rBdavmZMCiU8G84Jr3M_Ik
-	
-	databaseClusterName: voicemessagebot-bapxq
-	databaseClusterUserName: discord-bot
-	databaseClusterUserPassword: dESmZpWN13xmB0QN
-	databaseName: discord-bot
-}
