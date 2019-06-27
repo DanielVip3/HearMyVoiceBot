@@ -6,10 +6,11 @@ const audioStreamPerGuild = constants.audioStreamPerGuild;
 const embeds = require("../utils/embeds.js");
 
 client.on('message', async(message) => {
-	/* If bot can't write messages */
-	if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
-
 	if (!message.author.bot && message.channel.type === "text" && message.content.startsWith(`${prefix}stop`)) {
+
+		/* If bot can't write messages */
+		if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
 		let member = await message.guild.member(message.author);
 		
 		if (!member) {
