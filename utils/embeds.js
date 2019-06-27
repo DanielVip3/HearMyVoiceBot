@@ -183,7 +183,7 @@ function notInTheServer(user) {
 
 function notInAVoiceChannel(user) {
     return new MessageEmbed()
-        .setTitle(`Not a voice channel!`)
+        .setTitle(`Not in a voice channel!`)
         .setDescription(`It looks like you're not in a voice channel. You must join one, which I have permissions to join, before using this command.`)
         .setColor(0x141111)
         .setAuthor(`${client.user.username}#${client.user.discriminator}`, client.user.displayAvatarURL())
