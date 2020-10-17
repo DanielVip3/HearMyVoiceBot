@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/DanielVip3/HearMyVoiceBot#readme",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js#master",
+    "discord.js": "^12.3.1",
     "hjson": "^3.1.2",
     "mongoose": "^5.6.1",
     "node-lame": "^1.2.0",
